@@ -1,0 +1,444 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContentFlow — Autonomous Sales AI Agents for Business</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366F1;
+      --primary-hover: #4F46E5;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --success: #10B981;
+      --tg-color: #0284C7;
+      --wa-color: #16A34A;
+      --vb-color: #7C3AED;
+      --fb-color: #2563EB;
+      --sg-color: #3A76F0;
+      --sk-color: #00AFF0;
+    }
+
+
+    * { box-sizing: border-box; }
+
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+
+    header {
+      background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+      color: white;
+      padding: 45px 20px 35px 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    }
+
+
+    header h1 { margin: 0 0 10px 0; font-size: 2.3rem; font-weight: 700; }
+    header p { font-size: 1.05rem; opacity: 0.95; margin: 0 auto; max-width: 650px; }
+
+
+    .main-wrapper { flex: 1; }
+
+
+    .container {
+      max-width: 950px;
+      margin: -25px auto 40px auto;
+      padding: 0 20px;
+    }
+
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FEF3C7;
+      color: #B45309;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+
+    .promo-box {
+      background: linear-gradient(135deg, #EFF6FF 0%, #EEF2FF 100%);
+      border: 1px solid #BFDBFE;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 25px;
+    }
+    .promo-box h4 { margin: 0 0 10px 0; color: #1E40AF; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
+    .promo-box ul { margin: 0; padding-left: 20px; color: #1E3A8A; font-size: 0.92rem; line-height: 1.6; }
+
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      font-size: 1rem;
+      width: 100%;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+
+    .messenger-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .btn-msgr {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      color: white;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .btn-tg { background-color: var(--tg-color); }
+    .btn-wa { background-color: var(--wa-color); }
+    .btn-vb { background-color: var(--vb-color); }
+    .btn-fb { background-color: var(--fb-color); }
+    .btn-sg { background-color: var(--sg-color); }
+    .btn-sk { background-color: var(--sk-color); }
+
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+
+    .link-box {
+      background: #F8FAFC;
+      border: 1px dashed var(--border);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      word-break: break-all;
+      font-size: 0.88rem;
+    }
+
+
+    .chat-preview {
+      display: flex;
+      flex-direction: column;
+      height: 460px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #FAFAFA;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .msg {
+      padding: 8px 12px;
+      border-radius: 10px;
+      max-width: 82%;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    .msg.user { background: var(--primary); color: white; margin-left: auto; border-bottom-right-radius: 2px; }
+    .msg.bot { background: white; border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 2px; }
+
+
+    .quick-contacts {
+      display: flex;
+      gap: 6px;
+      padding: 8px 10px;
+      background: white;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .btn-chip {
+      background: #F1F5F9;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+    .btn-call { background: #EEF2FF; color: var(--primary); border-color: #C7D2FE; font-weight: 600; }
+
+
+    .chat-input {
+      display: flex;
+      padding: 10px;
+      background: white;
+      border-top: 1px solid var(--border);
+      gap: 8px;
+    }
+    .chat-input input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 0.9rem; }
+    .chat-input button { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 550px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .btn-secondary { background: #F1F5F9; color: var(--text); border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+
+
+    .loading { text-align: center; padding: 25px; font-weight: 600; color: var(--text-muted); }
+
+
+    /* Юридический Футер для Lemon Squeezy */
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+
+  <header>
+    <h1>ContentFlow Self-Service</h1>
+    <p>Create your Sales AI Agent in 1 minute. Autonomous 24/7 client engagement.</p>
+  </header>
+
+
+  <div class="main-wrapper">
+    <div class="container">
+
+
+      <!-- РЕГИСТРАЦИЯ -->
+      <div id="screen-register" class="card screen active">
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+          <label><i class="fas fa-globe"></i> Interface & AI Language:</label>
+          <select id="interfaceLang" onchange="changeLanguage(this.value)">
+            <option value="ru" selected>Русский</option>
+            <option value="en">English (Global)</option>
+            <option value="zh">中文 (China)</option>
+            <option value="hi">हिन्दी (India)</option>
+            <option value="es">Español (Spain/LatAm)</option>
+            <option value="uk">Українська</option>
+          </select>
+        </div>
+
+
+        <div class="badge"><i class="fas fa-gift"></i> <span id="badgeTxt">Акция: Тестируйте 7 дней бесплатно</span></div>
+        <h2 style="margin-top:0;" id="headingTxt">Создайте своего Sales AI Агента</h2>
+        
+        <div class="promo-box">
+          <h4><i class="fas fa-bolt"></i> Почему это выгоднее классического штата?</h4>
+          <ul>
+            <li><strong>Экономия до 50%+ бюджета:</strong> Дешевле содержания SMM-специалиста и отдельного менеджера по продажам.</li>
+            <li><strong>Гибкие тарифы:</strong> Индивидуальный план под объемы вашей компании.</li>
+            <li><strong>Без риска:</strong> Первые 7 дней — бесплатно. Тестируйте на реальных клиентах до оплаты.</li>
+          </ul>
+        </div>
+
+
+        <div class="form-group">
+          <label id="companyLbl">Название вашей компании или магазина:</label>
+          <input type="text" id="companyName" placeholder="Например: Интернет-магазин 'ТехноДом'">
+        </div>
+        
+        <div class="form-group">
+          <label id="emailLbl">Ваш Email (для доступа к персональной таблице с ценами):</label>
+          <input type="email" id="clientEmail" placeholder="your.email@gmail.com">
+        </div>
+
+
+        <button class="btn" id="btnSubmitTxt" onclick="startOnboarding()">Попробовать 7 дней бесплатно</button>
+
+
+        <h4 style="margin-top: 30px; margin-bottom: 10px;">Прямая связь с нами:</h4>
+        <div class="messenger-buttons">
+          <a href="https://t.me/YOUR_HANDLE" target="_blank" class="btn-msgr btn-tg"><i class="fab fa-telegram"></i> Telegram</a>
+          <a href="https://wa.me/YOUR_PHONE" target="_blank" class="btn-msgr btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="viber://chat?number=%2BYOUR_PHONE" target="_blank" class="btn-msgr btn-vb"><i class="fab fa-viber"></i> Viber</a>
+          <a href="https://m.me/YOUR_PAGE" target="_blank" class="btn-msgr btn-fb"><i class="fab fa-facebook-messenger"></i> Messenger</a>
+          <a href="https://signal.me/#p/+YOUR_PHONE" target="_blank" class="btn-msgr btn-sg"><i class="fas fa-comment-alt"></i> Signal</a>
+          <a href="skype:YOUR_SKYPE?chat" target="_blank" class="btn-msgr btn-sk"><i class="fab fa-skype"></i> Skype</a>
+        </div>
+      </div>
+
+
+      <!-- ЗАГРУЗКА -->
+      <div id="screen-loading" class="card screen">
+        <div class="loading">
+          <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary); margin-bottom: 15px;"></i>
+          <h3>Создаем вашу индивидуальную систему...</h3>
+          <p>Настраиваем доступ к персональной Google Таблице и подключаем ИИ-агента на 7 дней бесплатного теста.</p>
+        </div>
+      </div>
+
+
+      <!-- ДАШБОРД -->
+      <div id="screen-dashboard" class="card screen">
+        <div class="badge" style="background: #ECFDF5; color: var(--success);">✅ Бесплатный тестовый период (7 дней активен)</div>
+        <h2 style="margin-top:0;">Личный кабинет: <span id="dashCompanyName" style="color: var(--primary);"></span></h2>
+        <p style="color: var(--text-muted); margin-bottom: 25px;">Ваш Sales AI агент готов отвечать на вопросы ваших клиентов.</p>
+
+
+        <div class="dashboard-grid">
+          <div>
+            <h3>1. Ваша база товаров и цен</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Внесите свои услуги, цены и контакты. Бот будет мгновенно считывать из нее обновления.</p>
+            <div class="link-box">
+              <a id="sheetLink" href="#" target="_blank" style="font-weight: 600; color: var(--primary); text-decoration: none;">🔗 Открыть мою Google Таблицу с прайсом</a>
+            </div>
+
+
+            <h3 style="margin-top: 25px;">2. Ваша ссылка / Виджет</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Разместите эту ссылку на вашем сайте или отправляйте клиентам в соцсетях.</p>
+            <div class="link-box" id="appLinkText" style="font-size: 0.8rem;"></div>
+            
+            <button class="btn" style="background: #F1F5F9; color: var(--text); margin-top: 10px;" onclick="location.reload()">Создать еще одного бота</button>
+          </div>
+
+
+          <div>
+            <h3>3. Проверьте вашего ИИ-агента в действии</h3>
+            <div class="chat-preview">
+              <div class="chat-messages" id="dashChatMessages">
+                <div class="msg bot" id="chatWelcomeMsg">Здравствуйте! Я ваш Sales AI менеджер. Напишите мне вопрос по вашим товарам или услугам!</div>
+              </div>
+
+
+              <div class="quick-contacts">
+                <div class="btn-chip btn-call" onclick="openCallModal()"><i class="fas fa-phone-alt"></i> Заказать связь</div>
+                <div class="btn-chip" onclick="quickFill('Мой WhatsApp: ')"><i class="fab fa-whatsapp" style="color:var(--wa-color)"></i> WhatsApp</div>
+                <div class="btn-chip" onclick="quickFill('Мой Telegram: @')"><i class="fab fa-telegram" style="color:var(--tg-color)"></i> Telegram</div>
+                <div class="btn-chip" onclick="quickFill('Мой Viber: ')"><i class="fab fa-viber" style="color:var(--vb-color)"></i> Viber</div>
+                <div class="btn-chip" onclick="quickFill('Мой Signal: ')"><i class="fas fa-comment-alt" style="color:var(--sg-color)"></i> Signal</div>
+                <div class="btn-chip" onclick="quickFill('Мой Skype: ')"><i class="fab fa-skype" style="color:var(--sk-color)"></i> Skype</div>
+              </div>
+
+
+              <div class="chat-input">
+                <input type="text" id="dashUserInput" placeholder="Проверить работу бота..." onkeypress="handleDashKey(event)">
+                <button onclick="sendDashMessage()"><i class="fas fa-paper-plane"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <!-- ЮРИДИЧЕСКИЙ ФУТЕР ДЛЯ LEMON SQUEEZY -->
+  <footer>
+    <div>© 2026 ContentFlow SaaS platform. All rights reserved.</div>
+    <div style="margin-top: 8px;">
+      <a onclick="openModal('privacyModal')">Privacy Policy</a> | 
+      <a onclick="openModal('termsModal')">Terms of Service</a>
+    </div>
+  </footer>
+
+
+  <!-- МОДАЛЬНОЕ ОКНО: ЗАПРОС СВЯЗИ -->
+  <div class="modal-overlay" id="callModal">
+    <div class="modal">
+      <h3 style="margin-top:0;">Заказать обратную связь</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Укажите контакт и выберите удобные дату и время.</p>
+      
+      <div class="form-group">
+        <label>Куда перезвонить / написать:</label>
+        <select id="callType">
